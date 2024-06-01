@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+skinparam actorStyle awesome
+actor Pengguna
+actor "Staf Divisi" as Staf <<Pengelola Sistem>>
+actor "Kepala Bagian" as Kepala
+
+rectangle "Sistem Pengarsipan" {
+
+  Pengguna -- (Telusuri Katalog Arsip)
+  Pengguna -- (Unduh Dokumen)
+  Pengguna -- (Unggah Dokumen)
+  Pengguna -- (Autentikasi)
+  (Autentikasi) <.. (Daftar Pengguna) : <<include>> [Pengguna belum terdaftar]
+
+  Staf -- (Autentikasi)
+  (Autentikasi) <.. (Kelola Pengguna) : <<include>> [Staf terautentikasi]
+
+  (Unduh Dokumen) .> (Autentikasi) : <<include>>
+  (Unggah Dokumen) .> (Autentikasi) : <<include>>
+
+  (Kelola Pengguna) ..> (Batalkan Keanggotaan) : <<include>>
+  (Kelola Pengguna) ..> (Lihat Data Pengguna) : <<include>>
+  note right of (Batalkan Keanggotaan) : Pengguna tidak dapat\nmembatalkan keanggotaannya sendiri.
+
+  Staf -- (Hasilkan Laporan Aktivitas) : Dilakukan setiap akhir minggu
+  Kepala -- (Hasilkan Laporan Aktivitas) : Dikirim setiap akhir minggu
+  
+  note right of (Telusuri Katalog Arsip) : Tersedia untuk semua pengguna
+  note right of (Autentikasi) : Menggunakan alamat email dan\nkata kunci (minimal 8 karakter)
+
+}
+
+legend right
+  **Non-Functional Requirements**
+  | Kebutuhan | Deskripsi |
+  |---|---|
+  | Ketersediaan | Sistem harus tersedia 24 jam/7 hari |
+  | Keamanan | Autentikasi menggunakan alamat email dan kata kunci minimal 8 karakter |
+  | Aksesibilitas | Desain antarmuka mematuhi regulasi Akses Disabilitas |
+  | Performa | Sistem harus responsif dan efisien |
+endlegend
+@enduml
